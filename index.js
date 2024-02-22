@@ -9,6 +9,8 @@ const systemConfig = require('./config/system')
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const path = require('path');
+const moment = require('moment');
 
 dotenv.config();
 
@@ -27,6 +29,9 @@ app.set('view engine', 'pug');
 
 app.use(express.static(`${__dirname}/public`));
 
+/* New Route to the TinyMCE Node module */
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
+
 // flash
 app.use(cookieParser('KJJSLKASASASA'));
 app.use(session({ cookie: { maxAge: 60000 } }));
@@ -35,6 +40,7 @@ app.use(flash());
 
 //App Local Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
+app.locals.moment = moment;
 
 //Routes Clients
 routesClient(app);

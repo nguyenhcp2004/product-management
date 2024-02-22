@@ -1,0 +1,21 @@
+mixin select-tree(items, level = 1, parent_id)
+  each item in items
+    - const prefix = Array(level+1).join("-- ")
+    option(
+      value=item.id
+      selected = (item.id == parent_id ? true : false) 
+      ) #{prefix}#{item.title}
+    if(item.children)
+      +select-tree(item.children, level+1, parent_id)
+
+
+
+//- -- Điện thoại
+//- ---- Điện thoại SamSung
+//- ---- Điện thoại Iphone
+//- -- Thời trang
+//- ---- Thời trang Nam
+//- ------ Áo cộc Nam
+//- ------ Quần dài Nam
+//- ---- Thời trang Nữ
+//- ---- Thời trang Trẻ em
