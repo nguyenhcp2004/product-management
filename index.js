@@ -11,6 +11,8 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const path = require('path');
 const moment = require('moment');
+const http = require('http');
+const { Server } = require("socket.io");
 
 dotenv.config();
 
@@ -18,6 +20,13 @@ database.connect();
 
 const app = express();
 const port = process.env.PORT;
+
+//SocketIO
+const server = http.createServer(app);
+const io = new Server(server);
+
+global._io = io;
+//End SocketIO
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -47,6 +56,14 @@ routesClient(app);
 
 //Routes Admin
 routesAdmin(app);
-app.listen(port, () => {
+
+// 404 Not Found
+app.get("*", (req, res) => {
+  res.render("client/pages/errors/404", {
+    pageTitle: "404 Not Found",
+  });
+  // res.redirect("/");
+});
+server.listen(port, () => {
   console.log(`App is listening on port ${port}`)
 });
